@@ -145,6 +145,21 @@ func Load(filename string) (*Spell, error) {
 	return s, nil
 }
 
+// Load a bi-gram dictionary from disk from filename. Returns a new Spell instance on
+// success, or will return an error if there's a problem reading the file.
+func LoadBigram(filename string) (*Spell, error) {
+
+	s := New()
+
+	f, err := os.Open(filename)
+	if err != nil {
+		return nil, err
+	}
+	defer f.Close()
+
+
+}
+
 // AddEntry adds an entry to the dictionary. If the word already exists its data
 // will be overwritten. Returns true if a new word was added, false otherwise.
 // Will return an error if there was a problem adding a word, for example the
