@@ -7,12 +7,16 @@ package spell
 
 import (
 	"compress/gzip"
+	"encoding/csv"
 	"encoding/json"
 	"errors"
+	"io"
 	"io/ioutil"
+	"log"
 	"math"
 	"os"
 	"sort"
+	"strconv"
 	"strings"
 	"sync"
 	"sync/atomic"
@@ -145,19 +149,30 @@ func Load(filename string) (*Spell, error) {
 	return s, nil
 }
 
-// Load a bi-gram dictionary from disk from filename. Returns a new Spell instance on
+// Load a bi-gram dictionary from disk from filename. Returns a new map on
 // success, or will return an error if there's a problem reading the file.
-func LoadBigram(filename string) (*Spell, error) {
-
-	s := New()
-
+func LoadBigrams(filename string) (map[string]int, error) {
 	f, err := os.Open(filename)
 	if err != nil {
 		return nil, err
 	}
 	defer f.Close()
 
+	bigrams := map[string]int{}
+	reader := csv.NewReader(f)
 
+	for {
+		record, err := reader.Read()
+		if err == io.EOF {
+			break
+		}
+		if err != nil {
+			log.Fatal(err)
+		}
+
+		bigrams[record[0]], err = strconv.Atoi(record[1])
+	}
+	return bigrams, err
 }
 
 // AddEntry adds an entry to the dictionary. If the word already exists its data

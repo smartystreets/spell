@@ -234,3 +234,23 @@ func TestCornerCases(t *testing.T) {
 		t.Fatal(fmt.Sprintf("Expected ' ', got %s", suggestions[0].Word))
 	}
 }
+
+func TestLoadBigrams(t *testing.T) {
+	bigrams, err := LoadBigrams("data/bigrams.txt")
+
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	if bigrams["MARTIN LUTHER"] != 1000 {
+		t.Fatal("can't find 'MARTIN LUTHER'")
+	}
+
+	if bigrams["KING JR"] != 700 {
+		t.Fatal("can't find 'KING JR'")
+	}
+
+	if bigrams["SPOON"] != 0 {
+		t.Fatal("there is no spoon")
+	}
+}
