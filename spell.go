@@ -59,6 +59,7 @@ type Spell struct {
 	deletes        *deletesMap
 	longestWord    uint32
 	words          *wordsMap
+	bigrams        map[string]int
 }
 
 // WordData stores metadata about a word, for example its frequency.
